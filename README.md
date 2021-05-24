@@ -1,6 +1,6 @@
-# Unsupervised approach to cross-lingual summarization of user comments
+# Unsupervised Approach to Multilingual User Comments Summarization
 
-TODO: add a link to the paper
+Paper: https://www.aclweb.org/anthology/2021.hackashop-1.13/
 
 ### Usage
 
