@@ -25,7 +25,7 @@ def summarize(comments, n):
 
 
 if __name__ == '__main__':
-    # load example_comments.txt (assuming pre-tokenized examples on a sentence level)
+    # load example_comments.txt (assuming pre-tokenized comments on a sentence level and concatenated together)
     with open('example_comments.txt') as f:
         comments = [sent.strip() for sent in f.readlines()]
 
