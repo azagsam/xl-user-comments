@@ -91,19 +91,27 @@ def textrank(articles, encoders, reduction_methods, reduction_methods_params):
                         score, best_sentence_id = score
                         df['comment_id'].append(comment_id)
                         text = [f'<best_sentence> {s} </best_sentence>' if i == best_sentence_id else s for i, s in enumerate(json_file[comment_id])]
+
+                        # get best_sentence
+                        for sent in text:
+                            if '<best_sentence>' in sent:
+                                best_sentence = sent[16:-17]
+                                df['best_sentence'].append(best_sentence)
+                                break
+
                         df['text'].append(' '.join(text))
                         df['score'].append(score)
                         df['article_id'].append(int(file.name.split('.')[0]))
                     df = pd.DataFrame(df)
-                    df = df[['article_id', 'comment_id', 'text', 'score']]
-                    df = df.round(4)
+                    df = df[['article_id', 'comment_id', 'text', 'best_sentence', 'score']]
+                    df = df.round(5)
 
-                    # get golden summary, append it to the end of the row
-                    file_id = int(file.name.split('.')[0])
-                    with open(f'data/kristina/cro_summaries/reference/vecernji_{file_id}.tgt') as g:
-                        gold = ' '.join([line.strip() for line in g])
-
-                    df.loc[-1] = [int(file.name.split('.')[0]), 'gold', gold, 1]
+                    # # get golden summary, append it to the end of the row
+                    # file_id = int(file.name.split('.')[0])
+                    # with open(f'data/kristina/cro_summaries/reference/vecernji_{file_id}.tgt') as g:
+                    #     gold = ' '.join([line.strip() for line in g])
+                    #
+                    # df.loc[-1] = [int(file.name.split('.')[0]), 'gold', gold, 1]
 
                     if not os.path.isfile('output/comments.csv'):
                         df.to_csv('output/comments.csv', mode='w', header=True, index=False)
@@ -116,8 +124,8 @@ def textrank(articles, encoders, reduction_methods, reduction_methods_params):
 
 if __name__ == '__main__':
     encoders = {
-        # 'SentenceBERT': SentenceBERT,
-        'LaBSE': LaBSE,
+        'SentenceBERT': SentenceBERT,
+        # 'LaBSE': LaBSE,
         # 'CMLM': CMLM,
         # 'LASER': LASER  # Todo: NOTE: you have to specify language because the model uses different tokenizers
     }
